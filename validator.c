@@ -1,6 +1,4 @@
-#include <>
-
-int	check_symbols(char *buf, int size)
+int	valid_input(char *buf, int size)//проверка ввода
 {
 	while (size > 0)
 	{
@@ -11,110 +9,110 @@ int	check_symbols(char *buf, int size)
 	return (1);
 }
 
-int	check_size(char *buf, int size)
+int	valid_input_size(char *buf, int size)//проверяем размер ввода
 {
-	int	squ_x;
-	int	squ_y;
+	int	x;
+	int	y;
 
 	while (size >= 0)
 	{
 		size--;
-		squ_y = 0;
-		while (squ_y < 4)
+		y = 0;
+		while (y < 4)
 		{
-			squ_x = 0;
+			x = 0;
 			if (buf[size] != '\n')
 				return (0);
-			while (squ_x < 4)
+			while (x < 4)
 			{
 				size--;
 				if (size < 0 || buf[size] == '\n')
 					return (0);
-				squ_x++;
+				x++;
 			}
-			squ_y++;
+			y++;
 			size--;
 		}
 	}
 	return (1);
 }
 
-int	check_size_tetri(char **tetri)
+int	size_figure(char **tetra)
 {
-	int	i;
-	int	j;
+	int	x;
+	int	y;
 	int	size;
 
-	i = 0;
+	x = 0;
 	size = 0;
-	while (i < 4)
+	while (x < 4)
 	{
-		j = 0;
-		while (j < 4)
+		y = 0;
+		while (y < 4)
 		{
-			if (tetri[i][j] == '#')
+			if (tetra[x][y] == '#')
 				size++;
-			j++;
+			y++;
 		}
-		i++;
+		x++;
 	}
 	if (size == 4)
 		return (1);
 	return (0);
 }
 
-int	check_next(char **tetri)
+int	valid_figure(char **tetra)//проверяем, чтобы блоки составляли правильную фигуру и не превышали нужное количество
 {
-	int	i;
-	int	j;
+	int	x;
+	int	y;
 	int	valid;
 
-	i = 0;
+	x = 0;
 	valid = 0;
-	while (i < 4)
+	while (x < 4)
 	{
-		j = 0;
-		while (j < 4)
+		y = 0;
+		while (y < 4)
 		{
-			if (tetri[i][j] == '#')
+			if (tetra[x][y] == '#')
 			{
-				if (j < 3 && tetri[i][j + 1] == '#')
+				if (y < 3 && tetra[x][y + 1] == '#')
 					valid++;
-				if (i < 3 && tetri[i + 1][j] == '#')
+				if (x < 3 && tetra[x + 1][y] == '#')
 					valid++;
 			}
-			j++;
+			y++;
 		}
-		i++;
+		x++;
 	}
-	if ((valid = valid + check_next2(tetri)) < 5)
+	if ((valid = valid + check_element_numb(tetra)) < 5)
 		return (0);
 	return (1);
 }
 
-int	check_next2(char **tetri)
+int	check_element_numb(char **tetra)//возвращает количество элементов, если есть цельная фигура
 {
-	int	i;
-	int	j;
+	int	x;
+	int	y;
 	int	valid;
 
-	i = 3;
+	x = 3;
 	valid = 0;
-	while (i >= 0)
+	while (x >= 0)
 	{
-		j = 3;
-		while (j >= 0)
+		y = 3;
+		while (y >= 0)
 		{
-			if (tetri[i][j] == '#')
+			if (tetra[x][y] == '#')
 			{
-				if (j > 0 && tetri[i][j - 1] == '#')
+				if (y > 0 && tetra[x][y - 1] == '#')
 					valid++;
-				if (i > 0 && tetri[i - 1][j] == '#')
+				if (x > 0 && tetra[x - 1][y] == '#')
 					valid++;
 			}
-			j--;
+			y--;
 		}
-		i--;
+		x--;
 	}
 	return (valid);
 }
